@@ -1,4 +1,6 @@
 FeedEngine::Application.routes.draw do
+  resources :authentications
+
   match '/dashboard' => 'dashboard#show', as: :user_root
   scope "", constraints: lambda { |r| r.subdomain.present? && r.subdomain != 'www' } do
     match "", to: "users#show"
@@ -21,4 +23,7 @@ FeedEngine::Application.routes.draw do
   resources :links
   match '/sign_up' => 'users#new', as: 'sign_up'
   root :to => 'pages#index'
+
+  match '/auth/:provider/callback' => 'authentications#create'
+
 end
