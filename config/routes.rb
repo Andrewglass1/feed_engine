@@ -34,6 +34,8 @@ FeedEngine::Application.routes.draw do
     root :to => 'pages#index'
   end
   
+  match '/twitter' => 'users#twitter', as: 'twitter'
+
   match '/auth/:provider/callback' => 'authentications#create'
 
 end
