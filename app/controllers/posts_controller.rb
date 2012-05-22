@@ -26,4 +26,21 @@
     temp_posts = user.feed.posts.reverse.page(params[:page].to_i || 0)
     @posts = temp_posts.collect { |p| p.postable }
   end
+
+  def refeed
+    if params[:post_id]
+      orig_post = Post.find(params[:post_id])
+    else
+      head :status => :not_acceptable
+    end
+    unless orig_post.feed == current_user.feed    
+      cloned_post = current_user.feed.posts.create
+      cloned_post.postable = orig_post.postable
+    end
+    if cloned_post && cloned_post.save
+      head :status => :created
+    else
+      head :status => :not_acceptable
+    end
+  end
 end
